@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mindful Penny</title>
+    <!-- Adding a Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        /* Base styling */
+        body {
+            font-family: 'Poppins', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #e0f7fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* Centered container */
+        .container {
+            max-width: 400px;
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        /* Styling for container hover effect */
+        .container:hover {
+            transform: translateY(-5px);
+        }
+
+        /* Text input and button styling */
+        input, button {
+            padding: 15px;
+            margin: 15px 0;
+            width: 100%;
+            font-size: 16px;
+            border-radius: 8px;
+            max-width: 300px;
+            font-size: 16px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            box-sizing: border-box;
+        }
+
+        /* Button specific styling */
+        button {
+            background-color: #49cae4;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        /* Button hover effect */
+        button:hover {
+            background-color: #49cae4;
+            transform: scale(1.05);
+        }
+
+        /* Greeting and tips section */
+        #greeting-section {
+            display: none;
+        }
+
+        .tip {
+            font-style: italic;
+            color: #00796b;
+            margin-top: 20px;
+        }
+
+        .proverb {
+            font-style: italic;
+            color: #004d40;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+
+        /* Smooth fade-in effect */
+        .fade-in {
+            animation: fadeIn 1s forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="user-form">
+        <h1>Mindful Penny</h1>
+        <p>Please enter your name to get started</p>
+        <input type="text" id="userName" placeholder="Enter your name" required>
+        <button onclick="submitName()">Start</button>
+    </div>
+
+    <div class="container fade-in" id="greeting-section">
+        <h2 id="greeting-message"></h2>
+        <p class="tip" id="financial-tip"></p>
+        <p class="proverb">“Beware of little expenses; a small leak will sink a great ship.” — Benjamin Franklin</p>
+    </div>
+
+    <script src="js/script.js"></script>
+</body>
+</html>

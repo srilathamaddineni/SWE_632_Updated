@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ - Expense Tracker</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="home.html">Home</a></li>
+                <li><a href="expense-tracker.html">Expense Tracker</a></li>
+                <li><a href="create-budget.html">Create Your Budget</a></li>
+                <li><a href="FAQ.html">FAQ</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <h1>Frequently Asked Questions</h1>
+        <input type="text" id="faq-search" placeholder="Search FAQs..." onkeyup="searchFAQ()">
+        <div class="faq-container">
+            <h2>Expense Tracking</h2>
+            <div class="faq">
+                <div class="faq-question" onclick="toggleFAQ('faq1')">How do I add an expense?</div>
+                <div class="faq-answer" id="faq1">
+                    <p>To add an expense, navigate to the Expense Tracker section, fill out the form, and click 'Add Expense'.</p>
+                </div>
+            </div>
+            <div class="faq">
+                <div class="faq-question" onclick="toggleFAQ('faq2')">What should I do if I forget to add an expense?</div>
+                <div class="faq-answer" id="faq2">
+                    <p>You can add expenses at any time. If you forgot to add an expense on the day it was incurred, simply add it with the correct date when you remember.</p>
+                </div>
+            </div>
+            <h2>Budgeting</h2>
+            <div class="faq">
+                <div class="faq-question" onclick="toggleFAQ('faq3')">How do I edit or delete a budget?</div>
+                <div class="faq-answer" id="faq3">
+                    <p>If you need to make changes to a budget or delete it, go to the "Create Your Budget" section, find the budget entry, and use the "Edit" or "Delete" options.</p>
+                </div>
+            </div>
+            <div class="faq">
+                <div class="faq-question" onclick="toggleFAQ('faq4')">What is a good percentage breakdown for budgeting?</div>
+                <div class="faq-answer" id="faq4">
+                    <p>A popular budgeting method is the 50/30/20 rule, where 50% of your budget goes to needs (housing, food), 30% to wants (entertainment, dining), and 20% to savings or debt repayment.</p>
+                </div>
+            </div>
+            <div class="faq">
+                <div class="faq-question" onclick="toggleFAQ('faq5')">How can I adjust my budget if my income changes?</div>
+                <div class="faq-answer" id="faq5">
+                    <p>If your income changes, you can go back to the "Create Your Budget" section, update your total budget, and reallocate funds as necessary.</p>
+                </div>
+            </div>
+            <h2>General Questions</h2>
+            <div class="faq">
+                <div class="faq-question" onclick="toggleFAQ('faq6')">Is my data secure?</div>
+                <div class="faq-answer" id="faq6">
+                    <p>Your data is stored securely, and we employ industry-standard encryption to ensure your information is protected.</p>
+                </div>
+            </div>
+            <div class="faq">
+                <div class="faq-question" onclick="toggleFAQ('faq7')">Can I use this app on multiple devices?</div>
+                <div class="faq-answer" id="faq7">
+                    <p>Yes, you can use this app on multiple devices. Make sure you're signed into the same account to sync your data.</p>
+                </div>
+            </div>
+            <div class="faq">
+                <div class="faq-question" onclick="toggleFAQ('faq8')">How do I contact support?</div>
+                <div class="faq-answer" id="faq8">
+                    <p>You can contact support through the "Help" section in the app or by emailing support@example.com.</p>
+                </div>
+            </div>            
+        </div>
+    </main>
+    <script src="js/faq.js"></script>
+</body>
+</html>
