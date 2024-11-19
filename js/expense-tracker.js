@@ -16,7 +16,28 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const expenseCategorySelect = document.getElementById('expense-category');
     let customCategoryInput = null;
+    addExpenseButton.disabled = true;
 
+    function checkFormValidity() {
+        const expenseName = expenseNameInput.value.trim();
+        const expenseAmount = expenseAmountInput.value.trim();
+        const expenseCategory = expenseCategorySelect.value;
+        const expenseDate = expenseDateInput.value;
+        const customCategory = customCategoryInput ? customCategoryInput.value.trim() : '';
+
+        // Enable button only if all fields are filled and valid
+        if (
+            expenseName &&
+            expenseAmount &&
+            expenseCategory &&
+            expenseDate &&
+            (expenseCategory !== 'other' || customCategory)
+        ) {
+            addExpenseButton.disabled = false;
+        } else {
+            addExpenseButton.disabled = true;
+        }
+    }
     // Show custom category input when "Other" is selected
     expenseCategorySelect.addEventListener('change', function () {
         if (expenseCategorySelect.value === 'other') {
@@ -33,7 +54,9 @@ document.addEventListener('DOMContentLoaded', function () {
             customCategoryInput.style.display = 'none';
             customCategoryInput.value = '';
         }
+        checkFormValidity();
     });
+    checkFormValidity();
 
     // Handle form submission
     expenseForm.addEventListener('submit', function (event) {
@@ -74,6 +97,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         expenseForm.reset();
         if (customCategoryInput) customCategoryInput.style.display = 'none';
+        checkFormValidity();
     });
 
     // Function to create a row with event listeners

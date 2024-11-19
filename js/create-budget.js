@@ -16,13 +16,14 @@ document.addEventListener('DOMContentLoaded', function () {
     const confirmDeleteButton = document.getElementById('confirm-delete');  
     const cancelDeleteButton = document.getElementById('cancel-delete'); 
     const categoryColors = {
-        'Food': '#FF6384',
-        'Housing': '#36A2EB',
-        'Utilities': '#FFCE56',
-        'Entertainment': '#4BC0C0',
-        'Transportation': '#9966FF',
-        'Other': '#FF9F40'
+        'Food': '#D32F2F',        
+        'Housing': '#1976D2',     
+        'Utilities': '#FBC02D',  
+        'Entertainment': '#00796B', 
+        'Transportation': '#512DA8',
+        'Other': '#E65100'      
     };
+    
     updateColorLegend();
 
     totalBudgetInput.addEventListener('input', function () {
