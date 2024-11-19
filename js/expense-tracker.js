@@ -2,6 +2,12 @@ document.addEventListener('DOMContentLoaded', function () {
     const expenseForm = document.getElementById('expense-form');
     const expenseTableBody = document.querySelector('#expense-table tbody');
     const feedbackMessage = document.getElementById('feedback-message');
+    const addExpenseButton = document.querySelector('.cta-button');
+    const expenseNameInput = document.getElementById('expense-name');
+    const expenseAmountInput = document.getElementById('expense-amount');
+    const expenseDateInput = document.getElementById('expense-date');
+    const expenseCategorySelect = document.getElementById('expense-category');
+    let customCategoryInput = null;
     let editingRow = null;
     let lastDeletedExpenseData = null;
     let feedbackTimeout;
@@ -10,14 +16,13 @@ document.addEventListener('DOMContentLoaded', function () {
     const currentDate = new Date();
     const minDate = new Date(currentDate.getFullYear() - 100, 0, 1).toISOString().split('T')[0];
     const maxDate = new Date(currentDate.getFullYear(), 11, 31).toISOString().split('T')[0];
-    const dateInput = document.getElementById('expense-date');
-    dateInput.setAttribute('min', minDate);
-    dateInput.setAttribute('max', maxDate);
+    expenseDateInput.setAttribute('min', minDate);
+    expenseDateInput.setAttribute('max', maxDate);
 
-    const expenseCategorySelect = document.getElementById('expense-category');
-    let customCategoryInput = null;
+    // Initial button state
     addExpenseButton.disabled = true;
 
+    // Function to validate the form
     function checkFormValidity() {
         const expenseName = expenseNameInput.value.trim();
         const expenseAmount = expenseAmountInput.value.trim();
@@ -29,8 +34,8 @@ document.addEventListener('DOMContentLoaded', function () {
         if (
             expenseName &&
             expenseAmount &&
-            expenseCategory &&
             expenseDate &&
+            expenseCategory !== "" && // Ensure category is selected
             (expenseCategory !== 'other' || customCategory)
         ) {
             addExpenseButton.disabled = false;
@@ -38,7 +43,13 @@ document.addEventListener('DOMContentLoaded', function () {
             addExpenseButton.disabled = true;
         }
     }
-    // Show custom category input when "Other" is selected
+
+    // Add event listeners to inputs
+    expenseNameInput.addEventListener('input', checkFormValidity);
+    expenseAmountInput.addEventListener('input', checkFormValidity);
+    expenseDateInput.addEventListener('change', checkFormValidity);
+
+    // Handle category selection and custom input field
     expenseCategorySelect.addEventListener('change', function () {
         if (expenseCategorySelect.value === 'other') {
             if (!customCategoryInput) {
@@ -48,6 +59,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 customCategoryInput.placeholder = 'Enter custom category';
                 customCategoryInput.required = true;
                 expenseCategorySelect.parentNode.insertBefore(customCategoryInput, expenseCategorySelect.nextSibling);
+                customCategoryInput.addEventListener('input', checkFormValidity);
             }
             customCategoryInput.style.display = 'inline-block';
         } else if (customCategoryInput) {
@@ -56,15 +68,17 @@ document.addEventListener('DOMContentLoaded', function () {
         }
         checkFormValidity();
     });
+
+    // Initial validation
     checkFormValidity();
 
     // Handle form submission
     expenseForm.addEventListener('submit', function (event) {
         event.preventDefault();
 
-        const expenseName = document.getElementById('expense-name').value;
-        const expenseAmount = parseFloat(document.getElementById('expense-amount').value).toFixed(2);
-        const expenseDate = document.getElementById('expense-date').value;
+        const expenseName = expenseNameInput.value.trim();
+        const expenseAmount = parseFloat(expenseAmountInput.value).toFixed(2);
+        const expenseDate = expenseDateInput.value;
         let expenseCategory = expenseCategorySelect.value;
 
         if (expenseCategory === 'other' && customCategoryInput) {
@@ -80,16 +94,16 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
-        // Add or edit the expense
         if (editingRow) {
+            // Update an existing row
             editingRow.cells[0].textContent = expenseName;
             editingRow.cells[1].textContent = `$${expenseAmount}`;
             editingRow.cells[2].textContent = expenseCategory.charAt(0).toUpperCase() + expenseCategory.slice(1);
             editingRow.cells[3].textContent = expenseDate;
-            editingRow = null; // Reset after editing
+            editingRow = null;
             showFeedback('Expense updated successfully!', 'success');
         } else {
-            // Create a new row if not editing
+            // Add a new row
             const newRow = createRow(expenseName, expenseAmount, expenseCategory, expenseDate);
             expenseTableBody.appendChild(newRow);
             showFeedback('Expense added successfully!', 'success');
@@ -100,7 +114,7 @@ document.addEventListener('DOMContentLoaded', function () {
         checkFormValidity();
     });
 
-    // Function to create a row with event listeners
+    // Function to create a new row
     function createRow(name, amount, category, date) {
         const newRow = document.createElement('tr');
 
@@ -122,31 +136,29 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const actionsCell = document.createElement('td');
 
-        // Edit Button Functionality
         const editButton = document.createElement('button');
         editButton.textContent = 'Edit';
         editButton.classList.add('edit-button');
         editButton.addEventListener('click', function () {
-            document.getElementById('expense-name').value = nameCell.textContent;
-            document.getElementById('expense-amount').value = amountCell.textContent.slice(1); // Remove $ sign
+            expenseNameInput.value = nameCell.textContent;
+            expenseAmountInput.value = amountCell.textContent.slice(1);
             expenseCategorySelect.value = categoryCell.textContent.toLowerCase();
-            
+
             if (expenseCategorySelect.value === 'other') {
                 customCategoryInput.value = categoryCell.textContent;
                 customCategoryInput.style.display = 'inline-block';
             }
 
-            document.getElementById('expense-date').value = dateCell.textContent;
-            editingRow = newRow; // Set the row that is being edited
+            expenseDateInput.value = dateCell.textContent;
+            editingRow = newRow;
         });
         actionsCell.appendChild(editButton);
 
-        // Delete Button Functionality with Undo Option
         const deleteButton = document.createElement('button');
         deleteButton.textContent = 'Delete';
         deleteButton.classList.add('delete-button');
         deleteButton.addEventListener('click', function () {
-            lastDeletedExpenseData = { name, amount, category, date }; // Save deleted row data
+            lastDeletedExpenseData = { name, amount, category, date };
             newRow.remove();
             showUndoOption('Expense deleted successfully!');
         });
@@ -155,18 +167,17 @@ document.addEventListener('DOMContentLoaded', function () {
         newRow.appendChild(actionsCell);
         return newRow;
     }
-    
 
+    // Feedback display function
     function showFeedback(message, type) {
         feedbackMessage.textContent = message;
-        feedbackMessage.className = ''; // Reset classes
+        feedbackMessage.className = '';
         feedbackMessage.classList.add(type);
         feedbackMessage.style.display = 'block';
-
         setTimeout(() => feedbackMessage.style.display = 'none', 2000);
     }
 
-    // Show Undo Option after Deleting
+    // Undo delete
     function showUndoOption(message) {
         feedbackMessage.innerHTML = `${message} <button id="undo-button" class="undo-button">Undo</button>`;
         feedbackMessage.className = 'success';
@@ -174,26 +185,21 @@ document.addEventListener('DOMContentLoaded', function () {
 
         document.getElementById('undo-button').addEventListener('click', function () {
             if (lastDeletedExpenseData) {
-                // Recreate the row using the last deleted data
                 const restoredRow = createRow(
                     lastDeletedExpenseData.name,
                     lastDeletedExpenseData.amount,
                     lastDeletedExpenseData.category,
                     lastDeletedExpenseData.date
                 );
-                expenseTableBody.appendChild(restoredRow); // Restore the deleted row
-                lastDeletedExpenseData = null; // Clear saved data
+                expenseTableBody.appendChild(restoredRow);
+                lastDeletedExpenseData = null;
                 showFeedback('Expense restored!', 'success');
-                clearFeedback(); // Clear feedback message immediately on restore
             }
         });
 
-        feedbackTimeout = setTimeout(() => clearFeedback(), 10000); // 1 minute timeout
-
-        function clearFeedback() {
+        feedbackTimeout = setTimeout(() => {
             feedbackMessage.style.display = 'none';
             feedbackMessage.textContent = '';
-            clearTimeout(feedbackTimeout);
-        }
+        }, 10000);
     }
 });
