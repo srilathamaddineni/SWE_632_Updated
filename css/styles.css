@@ -444,5 +444,19 @@ h1 {
 .modal-content {
     text-align: center;
 }
+@media (min-width: 768px) {
+    #menu {
+        display: flex;
+    }
+}
+@media (max-width: 600px) {
+    body {
+        font-size: 14px;
+    }
+
+    .navbar {
+        flex-direction: column;
+    }
+}
 
 
